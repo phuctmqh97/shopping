@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\CategoryController;
 use App\Models\Category;
 
 /*
@@ -24,5 +24,7 @@ Route::get('/home', function () {
 
 Route::prefix('danh-muc')->group(function () {
     Route::get('/',[CategoryController::class, 'index'])->name('category.index');
-    Route::get('/add',[CategoryController::class, 'addForm'])->name('category.add');
+    Route::get('/add',[CategoryController::class, 'add'])->name('category.add');
+    Route::post('/store', [CategoryController::class, 'store'])->name('category.store');
 });
+
