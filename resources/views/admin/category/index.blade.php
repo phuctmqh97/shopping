@@ -29,21 +29,12 @@
             </thead>
   <tbody>
     @foreach ($categories as $cate) 
-    <!-- <tr>
-      <th scope="row">{{ $cate->id }}</th>
-      <td >{{ $cate->name }}</td>
-        <td>
-          <a href="" class="btn btn-outline-warning">Sửa</a>
-          <a href="" class="btn btn-outline-danger"> Xóa </a> 
-        </td>
-    
-    </tr> -->
     <tr>
                 <td>{{(($categories->currentPage()-1)*count($categories)) + $loop->iteration}}</td>
                 <td>{{$cate->name}}</td>
                 <td>
-                    <a href="" class="btn btn-success">Sửa</a>
-                    <a href="" class="btn btn-danger">Xóa</a>
+                    <a href="{{route('category.edit', ['id' => $cate->id])}}" class="btn btn-success">Sửa</a>
+                    <a href="{{route('category.delete', ['id' => $cate->id])}}" class="btn btn-danger">Xóa</a>
                 </td>
             </tr>
     @endforeach

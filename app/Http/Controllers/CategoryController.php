@@ -18,7 +18,7 @@ class CategoryController extends Controller
             $categoryQuery = Category::where('name', 'like', '%' . $request->keyword . "%");
             $category = $categoryQuery->paginate($pagesize)->appends($searchData);
         }
-        // $categories = $this->category->latest()->paginate(5);
+        $category = $this->category->latest()->paginate(5);
         // return view('admin.category.index', compact('categories'));
         return view(
             'admin.category.index',
@@ -34,13 +34,45 @@ class CategoryController extends Controller
         $this->category = $category;
     }
     public function add(){
-        $data = $this->category->all();
-        $recusive = new Recusive($data);
-        $htmlOption = $recusive->categoryRecusive();
+        // $data = $this->category->all();
+        // $recusive = new Recusive($data);
+        // $htmlOption = $recusive->categoryRecusive();
+        $htmlOption = $this->getCategory('id');
         return view('admin.category.add' ,compact('htmlOption'));
     }
     public function store(Request $request){
         $model = new Category();
+        $model->fill($request->all());
+        $model->save();
+        return redirect(route('category.index'));
+    }
+
+    public function delete($id){
+        Category::destroy($id);
+        return redirect()->back();
+    }
+
+    public function getCategory($parentId){
+        $data = $this->category->all();
+        $recusive = new Recusive($data);
+        $htmlOption = $recusive->categoryRecusive($parentId);
+        return $htmlOption;
+    }
+
+    public function edit($id){
+    //    $category = $this->category->find($id);
+
+    //    $data = $this->category->all();
+    //    $recusive = new Recusive($data);
+    //    $htmlOption = $recusive->categoryRecusive();
+    $htmlOption = $this->getCategory($id);
+    return view('admin.category.edit', compact('htmlOption', 'category'));    
+    }
+    public function save($id, Request $request){
+        $model = Category::find($id);
+        if (!$model) {      
+            return  redirect()->back();
+        }
         $model->fill($request->all());
         $model->save();
         return redirect(route('category.index'));
